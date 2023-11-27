@@ -2,8 +2,6 @@
 **.pem
 
 # Data files (not to be put online)
-**.csv
-  !results/*.csv
 **.tsv
 **.h5
 **.5
