@@ -3,6 +3,8 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 gammahat <- as.matrix(read.csv('scores.csv', header = FALSE))
 probs_array <- as.matrix(read.csv('probs.csv', header = FALSE))
 
+## import arms and rewards as well, check the sample mean naive.
+
 set.seed(123)
 
 policy1 <- list(
