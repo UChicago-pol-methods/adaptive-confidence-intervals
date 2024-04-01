@@ -49,3 +49,48 @@ out_full_te2 <- output_estimates(
   gammahat = gammahat,
   probs_array = probs_array,
   floor_decay = 0.7)
+
+# Compare the two approaches for uniform and non_contextual_two_point
+compare_methods <- function(out_full_te1, out_full_te2) {
+  # Initialize an empty data frame to hold the comparison data
+  comparison_df <- data.frame(method = character(),
+                              estimate = numeric(),
+                              std_error = numeric(),
+                              contrasts = character(),
+                              policy = integer(),
+                              from = character(),
+                              stringsAsFactors = FALSE)
+
+  # Function to process and append data
+  process_data <- function(data, policy_num, contrasts, from) {
+    for (method in c("uniform", "non_contextual_twopoint")) {
+      if (method %in% rownames(data)) {
+        row <- data.frame(
+          method = method,
+          estimate = data[method, "estimate"],
+          std_error = data[method, "std.error"],
+          contrasts = contrasts,
+          policy = policy_num,
+          from = from,
+          stringsAsFactors = FALSE
+        )
+        comparison_df <<- rbind(comparison_df, row)
+      }
+    }
+  }
+
+  # Process and append data for each subset and condition
+  process_data(out_full_te1[[1]], 1, "combined", "out_full_te1[[1]]")
+  process_data(out_full_te1[[2]], 2, "combined", "out_full_te1[[2]]")
+  process_data(out_full_te2[[1]], 1, "separate", "out_full_te2[[1]]")
+  process_data(out_full_te2[[2]], 2, "separate", "out_full_te2[[2]]")
+
+  return(comparison_df)
+}
+
+
+comparison_df <- compare_methods(out_full_te1, out_full_te2)
+print(comparison_df)
+
+
+
