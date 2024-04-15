@@ -61,13 +61,23 @@ out_full_te1 <- output_estimates(
 
 ## The second approach takes asymptotically normal inference about
 ## \delta(w_1, w_2): \delta ^ hat (w_1, w_2) = Q ^ hat (w_1) - Q ^ hat (w_2)
-out_full_te2 <- output_estimates(
-  policy0 = policy0,
-  policy1 = policy1,
+out_full_te2.1 <- output_estimates(
+  policy0 = policy1_main[[1]],
+  policy1 = list(policy1_main[[3]]),
   contrasts = "separate",
   gammahat = gammahat,
   probs_array = probs_array,
   floor_decay = 0.7)
+out_full_te2.1
+
+out_full_te2.2 <- output_estimates(
+  policy0 = policy1_main[[2]],
+  policy1 = list(policy1_main[[3]]),
+  contrasts = "separate",
+  gammahat = gammahat,
+  probs_array = probs_array,
+  floor_decay = 0.7)
+out_full_te2.2
 
 # Compare the two approaches for uniform and non_contextual_two_point
 compare_methods <- function(out_full_te1, out_full_te2) {
