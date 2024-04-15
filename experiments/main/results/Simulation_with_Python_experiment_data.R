@@ -7,17 +7,36 @@ probs_array <- as.matrix(read.csv('probs.csv', header = FALSE))
 
 set.seed(123)
 
-policy1 <- list(
+policy1_main <- list(
+  matrix(
+    c(rep(1, nrow(gammahat)), rep(0, nrow(gammahat)), rep(0, nrow(gammahat))),
+    nrow = nrow(gammahat)),
   matrix(
     c(rep(0, nrow(gammahat)), rep(1, nrow(gammahat)), rep(0, nrow(gammahat))),
     nrow = nrow(gammahat)),
   matrix(
-  c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)), rep(1, nrow(gammahat))),
-  nrow = nrow(gammahat)))
+    c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)), rep(1, nrow(gammahat))),
+    nrow = nrow(gammahat)))
+
+policy1 <- list(
+  matrix(
+    c(rep(1, nrow(gammahat)), rep(0, nrow(gammahat)), rep(0, nrow(gammahat))),
+    nrow = nrow(gammahat)),
+  matrix(
+    c(rep(0, nrow(gammahat)), rep(1, nrow(gammahat)), rep(0, nrow(gammahat))),
+    nrow = nrow(gammahat))
+  )
 
 policy0 <- matrix(
-    c(rep(1, nrow(gammahat)), rep(0, nrow(gammahat)*(ncol(gammahat)-1)) ),
+    c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)), 
+      rep(1, nrow(gammahat))),
     nrow = nrow(gammahat))
+
+# main effects
+output_estimates(policy1 = policy1_main,
+                 gammahat = gammahat,
+                 probs_array = probs_array,
+                 floor_decay = 0.7)
 
 output_estimates(policy1 = policy1,
                  gammahat = gammahat,
