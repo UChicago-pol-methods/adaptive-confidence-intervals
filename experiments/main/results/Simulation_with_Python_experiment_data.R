@@ -3,11 +3,11 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 gammahat <- as.matrix(read.csv('scores.csv', header = FALSE))
 probs_array <- as.matrix(read.csv('probs.csv', header = FALSE))
 
-## import arms and rewards as well, check the sample mean naive.
 
 set.seed(123)
 
 policy1_main <- list(
+  # includes all matrices in policy1 and policy0
   matrix(
     c(rep(1, nrow(gammahat)), rep(0, nrow(gammahat)), rep(0, nrow(gammahat))),
     nrow = nrow(gammahat)),
@@ -19,6 +19,7 @@ policy1_main <- list(
     nrow = nrow(gammahat)))
 
 policy1 <- list(
+  # includes only the first two matrices of policy1_main
   matrix(
     c(rep(1, nrow(gammahat)), rep(0, nrow(gammahat)), rep(0, nrow(gammahat))),
     nrow = nrow(gammahat)),
@@ -33,7 +34,7 @@ policy0 <- matrix(
     nrow = nrow(gammahat))
 
 # main effects
-output_estimates(policy1 = policy1_main,
+output_estimates <- output_estimates(policy1 = policy1_main,
                  gammahat = gammahat,
                  probs_array = probs_array,
                  floor_decay = 0.7)
@@ -80,7 +81,10 @@ out_full_te2.2 <- output_estimates(
 out_full_te2.2
 
 # Compare the two approaches for uniform and non_contextual_two_point
-compare_methods <- function(out_full_te1, out_full_te2) {
+compare_methods <- function(output_estimates, 
+                            out_full_te1, 
+                            out_full_te2.1, 
+                            out_full_te2.2) {
   # Initialize an empty data frame to hold the comparison data
   comparison_df <- data.frame(method = character(),
                               estimate = numeric(),
@@ -109,17 +113,22 @@ compare_methods <- function(out_full_te1, out_full_te2) {
   }
 
   # Process and append data for each subset and condition
-  process_data(out_full_te1[[1]], 1, "combined", "out_full_te1[[1]]")
-  process_data(out_full_te1[[2]], 2, "combined", "out_full_te1[[2]]")
-  process_data(out_full_te2[[1]], 1, "separate", "out_full_te2[[1]]")
-  process_data(out_full_te2[[2]], 2, "separate", "out_full_te2[[2]]")
+  process_data(output_estimates[[1]], "0", "combined", "output_estimates[[1]]")
+  process_data(output_estimates[[2]], "1", "combined", "output_estimates[[2]]")
+  process_data(output_estimates[[3]], "2", "combined", "output_estimates[[3]]")
+  process_data(out_full_te1[[1]], "(1,0)", "combined", "out_full_te1[[1]]")
+  process_data(out_full_te1[[2]], "(2,0)", "combined", "out_full_te1[[2]]")
+  process_data(out_full_te2.1[[1]], "(0,1)", "separate", "out_full_te2.1[[1]]")
+  process_data(out_full_te2.2[[1]], "(0,2)", "separate", "out_full_te2.2[[1]]")
 
   return(comparison_df)
 }
 
 
-comparison_df <- compare_methods(out_full_te1, out_full_te2)
+comparison_df <- compare_methods(output_estimates, 
+                                 out_full_te1, 
+                                 out_full_te2.1, 
+                                 out_full_te2.2)
 print(comparison_df)
-
 
 
