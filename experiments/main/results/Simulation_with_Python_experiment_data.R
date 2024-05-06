@@ -29,7 +29,7 @@ policy1 <- list(
   )
 
 policy0 <- matrix(
-    c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)), 
+    c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)),
       rep(1, nrow(gammahat))),
     nrow = nrow(gammahat))
 
@@ -39,10 +39,10 @@ output_estimates <- output_estimates(policy1 = policy1_main,
                  probs_array = probs_array,
                  floor_decay = 0.7)
 
-output_estimates(policy1 = policy1,
-                 gammahat = gammahat,
-                 probs_array = probs_array,
-                 floor_decay = 0.7)
+# output_estimates(policy1 = policy1,
+#                  gammahat = gammahat,
+#                  probs_array = probs_array,
+#                  floor_decay = 0.7)
 
 # Get estimates for treatment effects of policies as contrast to control
 # \delta(w_1, w_2) = E[Y_t(w_1) - Y_t(w_2)].
@@ -63,8 +63,8 @@ out_full_te1 <- output_estimates(
 ## The second approach takes asymptotically normal inference about
 ## \delta(w_1, w_2): \delta ^ hat (w_1, w_2) = Q ^ hat (w_1) - Q ^ hat (w_2)
 out_full_te2.1 <- output_estimates(
-  policy0 = policy1_main[[1]],
-  policy1 = list(policy1_main[[3]]),
+  policy0 = policy0,
+  policy1 = list(policy1[[1]]),
   contrasts = "separate",
   gammahat = gammahat,
   probs_array = probs_array,
@@ -72,8 +72,8 @@ out_full_te2.1 <- output_estimates(
 out_full_te2.1
 
 out_full_te2.2 <- output_estimates(
-  policy0 = policy1_main[[2]],
-  policy1 = list(policy1_main[[3]]),
+  policy0 = policy0,
+  policy1 = list(policy1[[2]]),
   contrasts = "separate",
   gammahat = gammahat,
   probs_array = probs_array,
@@ -81,9 +81,9 @@ out_full_te2.2 <- output_estimates(
 out_full_te2.2
 
 # Compare the two approaches for uniform and non_contextual_two_point
-compare_methods <- function(output_estimates, 
-                            out_full_te1, 
-                            out_full_te2.1, 
+compare_methods <- function(output_estimates,
+                            out_full_te1,
+                            out_full_te2.1,
                             out_full_te2.2) {
   # Initialize an empty data frame to hold the comparison data
   comparison_df <- data.frame(method = character(),
@@ -113,21 +113,21 @@ compare_methods <- function(output_estimates,
   }
 
   # Process and append data for each subset and condition
-  process_data(output_estimates[[1]], "0", "combined", "output_estimates[[1]]")
-  process_data(output_estimates[[2]], "1", "combined", "output_estimates[[2]]")
-  process_data(output_estimates[[3]], "2", "combined", "output_estimates[[3]]")
+  process_data(output_estimates[[1]], "0", "main effect", "output_estimates[[1]]")
+  process_data(output_estimates[[2]], "1", "main effect", "output_estimates[[2]]")
+  process_data(output_estimates[[3]], "2", "main effect", "output_estimates[[3]]")
   process_data(out_full_te1[[1]], "(1,0)", "combined", "out_full_te1[[1]]")
   process_data(out_full_te1[[2]], "(2,0)", "combined", "out_full_te1[[2]]")
-  process_data(out_full_te2.1[[1]], "(0,1)", "separate", "out_full_te2.1[[1]]")
-  process_data(out_full_te2.2[[1]], "(0,2)", "separate", "out_full_te2.2[[1]]")
+  process_data(out_full_te2.1[[1]], "(1,0)", "separate", "out_full_te2.1[[1]]")
+  process_data(out_full_te2.2[[1]], "(2,0)", "separate", "out_full_te2.2[[1]]")
 
   return(comparison_df)
 }
 
 
-comparison_df <- compare_methods(output_estimates, 
-                                 out_full_te1, 
-                                 out_full_te2.1, 
+comparison_df <- compare_methods(output_estimates,
+                                 out_full_te1,
+                                 out_full_te2.1,
                                  out_full_te2.2)
 print(comparison_df)
 
