@@ -311,7 +311,7 @@ def wdecorr_stats(arms, rewards, K, W_lambdas, truth, alpha=0.10):
     tstat = bias / stderr
     tstat[stderr == 0] = np.nan
     quantile = norm.ppf(1 - alpha / 2)
-    cover = (np.abs(tstat) < quantile).astype(np.float_)
+    cover = (np.abs(tstat) < quantile).astype(np.float64)
     ci_r = quantile * stderr
     error = bias ** 2
     return np.stack((estimate, stderr, bias, cover, tstat, error, ci_r, truth))
