@@ -135,7 +135,8 @@ compare_methods <- function(output_estimates,
 
 
 comparison_df <- compare_methods(output_estimates,
-                                 out_full_te1,
+                                 out_full_te1.1,
+                                 out_full_te1.2,
                                  out_full_te2.1,
                                  out_full_te2.2)
 print(comparison_df)
