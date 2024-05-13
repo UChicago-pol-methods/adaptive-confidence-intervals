@@ -1,8 +1,16 @@
+---
+title: "Simulation_with_Python_experiment_data"
+date: "`r Sys.Date()`"
+output: pdf_document
+fontsize: 10pt
+---
+
+# Preparing the data
+```{r}
 library(banditsCI)
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 gammahat <- as.matrix(read.csv('scores.csv', header = FALSE))
 probs_array <- as.matrix(read.csv('probs.csv', header = FALSE))
-
 
 set.seed(123)
 
@@ -17,7 +25,10 @@ policy1_main <- list(
   matrix(
     c(rep(0, nrow(gammahat)*(ncol(gammahat)-1)), rep(1, nrow(gammahat))),
     nrow = nrow(gammahat)))
+```
 
+# Running the simulation
+```{r}
 # main effects
 output_estimates <- output_estimates(policy1 = policy1_main,
                  gammahat = gammahat,
@@ -65,7 +76,10 @@ out_full_te2.2 <- output_estimates(
   gammahat = gammahat,
   probs_array = probs_array,
   floor_decay = 0.7)
+```
 
+# Function to compare the results
+```{r}
 # Compare the two approaches for uniform and non_contextual_two_point
 compare_methods <- function(output_estimates,
                             out_full_te1.1,
@@ -103,15 +117,18 @@ compare_methods <- function(output_estimates,
   process_data(output_estimates[[1]], "0", "main effect", "output_estimates[[1]]")
   process_data(output_estimates[[2]], "1", "main effect", "output_estimates[[2]]")
   process_data(output_estimates[[3]], "2", "main effect", "output_estimates[[3]]")
-  process_data(out_full_te1.1[[1]], "(1,0)", "combined", "out_full_te1.1[[1]]")
-  process_data(out_full_te1.2[[1]], "(2,0)", "combined", "out_full_te1.2[[1]]")
-  process_data(out_full_te2.1[[1]], "(1,0)", "separate", "out_full_te2.1[[1]]")
-  process_data(out_full_te2.2[[1]], "(2,0)", "separate", "out_full_te2.2[[1]]")
+  process_data(out_full_te1.1[[1]], "(0,1)", "combined", "out_full_te1.1[[1]]")
+  process_data(out_full_te1.2[[1]], "(0,2)", "combined", "out_full_te1.2[[1]]")
+  process_data(out_full_te2.1[[1]], "(0,1)", "separate", "out_full_te2.1[[1]]")
+  process_data(out_full_te2.2[[1]], "(0,2)", "separate", "out_full_te2.2[[1]]")
 
   return(comparison_df)
 }
 
+```
 
+# Comparing the results
+```{r}
 comparison_df <- compare_methods(output_estimates,
                                  out_full_te1.1,
                                  out_full_te1.2,
@@ -119,6 +136,8 @@ comparison_df <- compare_methods(output_estimates,
                                  out_full_te2.2)
 # Show the comparison data frame sorted by method
 comparison_df <- comparison_df[order(comparison_df$method), ]
-print(comparison_df)
 
+# print the comparison data frame as a table
+knitr::kable(comparison_df)
+```
 
