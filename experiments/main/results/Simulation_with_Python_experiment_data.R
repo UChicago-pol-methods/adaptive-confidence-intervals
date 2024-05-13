@@ -39,11 +39,6 @@ output_estimates <- output_estimates(policy1 = policy1_main,
                  probs_array = probs_array,
                  floor_decay = 0.7)
 
-# output_estimates(policy1 = policy1,
-#                  gammahat = gammahat,
-#                  probs_array = probs_array,
-#                  floor_decay = 0.7)
-
 # Get estimates for treatment effects of policies as contrast to control
 # \delta(w_1, w_2) = E[Y_t(w_1) - Y_t(w_2)].
 # In Hadad et al. (2021) there are two approaches.
@@ -77,7 +72,6 @@ out_full_te2.1 <- output_estimates(
   gammahat = gammahat,
   probs_array = probs_array,
   floor_decay = 0.7)
-out_full_te2.1
 
 out_full_te2.2 <- output_estimates(
   policy0 = policy0,
@@ -86,7 +80,6 @@ out_full_te2.2 <- output_estimates(
   gammahat = gammahat,
   probs_array = probs_array,
   floor_decay = 0.7)
-out_full_te2.2
 
 # Compare the two approaches for uniform and non_contextual_two_point
 compare_methods <- function(output_estimates,
@@ -125,8 +118,8 @@ compare_methods <- function(output_estimates,
   process_data(output_estimates[[1]], "0", "main effect", "output_estimates[[1]]")
   process_data(output_estimates[[2]], "1", "main effect", "output_estimates[[2]]")
   process_data(output_estimates[[3]], "2", "main effect", "output_estimates[[3]]")
-  process_data(out_full_te1.1[[1]], "(1,0)", "combined", "out_full_te1[[1]]")
-  process_data(out_full_te1.2[[1]], "(2,0)", "combined", "out_full_te1[[2]]")
+  process_data(out_full_te1.1[[1]], "(1,0)", "combined", "out_full_te1.1[[1]]")
+  process_data(out_full_te1.2[[1]], "(2,0)", "combined", "out_full_te1.2[[1]]")
   process_data(out_full_te2.1[[1]], "(1,0)", "separate", "out_full_te2.1[[1]]")
   process_data(out_full_te2.2[[1]], "(2,0)", "separate", "out_full_te2.2[[1]]")
 
@@ -139,6 +132,8 @@ comparison_df <- compare_methods(output_estimates,
                                  out_full_te1.2,
                                  out_full_te2.1,
                                  out_full_te2.2)
+# Show the comparison data frame sorted by method
+comparison_df <- comparison_df[order(comparison_df$method), ]
 print(comparison_df)
 
 
