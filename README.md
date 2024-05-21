@@ -1,6 +1,4 @@
-<h1 align="center">Adaptive Confidence Intervals</h1>
-
-Models for paper [_Confidence Intervals for Policy Evaluation in Adaptive Experiments_](https://arxiv.org/abs/1911.02768).
+<h1 align="center">Non Contextual Replication of Adaptive Confidence Intervals</h1>
 
 # R Package Adaptation
 
@@ -20,6 +18,8 @@ Our R simulations have confirmed that the results are consistent with those gene
 The following is the original README.md:
 
 # Overview
+
+Models for paper [_Confidence Intervals for Policy Evaluation in Adaptive Experiments_](https://arxiv.org/abs/1911.02768).
 
 *Note: For any questions, please file an issue.*
 
