@@ -13,6 +13,7 @@ Our analysis script in R can be reviewed here:
 - Rendered PDF: [experiments/main/results/Simulation_with_Python_experiment_data.pdf](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/results/Simulation_with_Python_experiment_data.pdf)
 
 The objective is to compare the estimates produced in the [python notebook](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/simulations.ipynb) (cells 8 and 9) to those in the R script, reported below:
+(Note that in numerical examples Hadad et al. estimate contrasts using the "separate" approach, Equation 23 in the text.)
 
 |method                  |  estimate| std_error|contrasts   |policy |
 |:-----------------------|---------:|---------:|:-----------|:------|
