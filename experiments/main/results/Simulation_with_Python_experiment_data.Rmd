@@ -6,14 +6,14 @@ fontsize: 10pt
 ---
 
 # 1. Preparing the data
-```{r}
+```{r setup}
 library(banditsCI)
-setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+
+# Read in data generated in python notebook
 gammahat <- as.matrix(read.csv('scores.csv', header = FALSE))
 probs_array <- as.matrix(read.csv('probs.csv', header = FALSE))
 
-set.seed(123)
-
+# Define the policies we want to evaluate
 policy1_main <- list(
   # includes all matrices in policy1 and policy0
   matrix(
@@ -27,17 +27,17 @@ policy1_main <- list(
     nrow = nrow(gammahat)))
 ```
 
-# 2. Running the simulation
+# 2. Estimation
 
-## 2.1 Main Effect
-```{r}
+## 2.1 Main Effects
+```{r main_effects}
 output_estimates <- output_estimates(policy1 = policy1_main,
-                 gammahat = gammahat,
-                 probs_array = probs_array,
-                 floor_decay = 0.7)
+                                     gammahat = gammahat,
+                                     probs_array = probs_array,
+                                     floor_decay = 0.7)
 ```
 
-## 2.2 Get estimates for treatment effects of policies as contrast to control
+## 2.2 Treatment effects in contrast to control
 $\delta(w_1, w_2) = E[Y_t(w_1) - Y_t(w_2)]$.
 
 In Hadad et al. (2021) there are two approaches.
@@ -45,7 +45,7 @@ The first approach: use the difference in AIPW scores as the unbiased scoring ru
 
 The following function implements the first approach by subtracting policy0, the control arm, from all the arms in policy1, except for the control arm itself.
 
-```{r}
+```{r contrasts_1}
 out_full_te1.1 <- output_estimates(
   policy0 = policy1_main[[1]],
   policy1 = list(policy1_main[[3]]),
@@ -65,7 +65,7 @@ out_full_te1.2 <- output_estimates(
 
 The second approach takes asymptotically normal inference about $\delta(w_1, w_2): \delta ^ hat (w_1, w_2) = Q ^ hat (w_1) - Q ^ hat (w_2)$
 
-```{r}
+```{r contrasts_2}
 
 out_full_te2.1 <- output_estimates(
   policy0 = policy1_main[[1]],
@@ -84,62 +84,43 @@ out_full_te2.2 <- output_estimates(
   floor_decay = 0.7)
 ```
 
-# 3. Function to compare the results
-```{r}
+# 3. Compare the results
+```{r results}
 # Compare the two approaches for uniform and non_contextual_two_point
-compare_methods <- function(output_estimates,
-                            out_full_te1.1,
-                            out_full_te1.2,
-                            out_full_te2.1,
-                            out_full_te2.2) {
-  # Initialize an empty data frame to hold the comparison data
-  comparison_df <- data.frame(method = character(),
-                              estimate = numeric(),
-                              std_error = numeric(),
-                              contrasts = character(),
-                              policy = integer(),
-                              from = character(),
-                              stringsAsFactors = FALSE)
+comparison_df <- data.frame(method = character(),
+                            estimate = numeric(),
+                            std_error = numeric(),
+                            contrasts = character(),
+                            policy = integer(),
+                            stringsAsFactors = FALSE)
 
-  # Function to process and append data
-  process_data <- function(data, policy_num, contrasts, from) {
-    for (method in c("uniform", "non_contextual_twopoint")) {
-      if (method %in% rownames(data)) {
-        row <- data.frame(
-          method = method,
-          estimate = data[method, "estimate"],
-          std_error = data[method, "std.error"],
-          contrasts = contrasts,
-          policy = policy_num,
-          from = from,
-          stringsAsFactors = FALSE
-        )
-        comparison_df <<- rbind(comparison_df, row)
-      }
+# Function to process and append data
+process_data <- function(data, policy_num, contrasts) {
+  for (method in c("uniform", "non_contextual_twopoint")) {
+    if (method %in% rownames(data)) {
+      row <- data.frame(
+        method = method,
+        estimate = data[method, "estimate"],
+        std_error = data[method, "std.error"],
+        contrasts = contrasts,
+        policy = policy_num,
+        stringsAsFactors = FALSE
+      )
+      comparison_df <<- rbind(comparison_df, row)
     }
   }
-
-  # Process and append data for each subset and condition
-  process_data(output_estimates[[1]], "0", "main effect", "output_estimates[[1]]")
-  process_data(output_estimates[[2]], "1", "main effect", "output_estimates[[2]]")
-  process_data(output_estimates[[3]], "2", "main effect", "output_estimates[[3]]")
-  process_data(out_full_te1.1[[1]], "(0,1)", "combined", "out_full_te1.1[[1]]")
-  process_data(out_full_te1.2[[1]], "(0,2)", "combined", "out_full_te1.2[[1]]")
-  process_data(out_full_te2.1[[1]], "(0,1)", "separate", "out_full_te2.1[[1]]")
-  process_data(out_full_te2.2[[1]], "(0,2)", "separate", "out_full_te2.2[[1]]")
-
-  return(comparison_df)
 }
 
-```
+# Process and append data for each subset and condition
+process_data(output_estimates[[1]], "0", "main effect")
+process_data(output_estimates[[2]], "1", "main effect")
+process_data(output_estimates[[3]], "2", "main effect")
+process_data(out_full_te1.1[[1]], "(0,1)", "combined")
+process_data(out_full_te1.2[[1]], "(0,2)", "combined")
+process_data(out_full_te2.1[[1]], "(0,1)", "separate")
+process_data(out_full_te2.2[[1]], "(0,2)", "separate")
 
-```{r}
-comparison_df <- compare_methods(output_estimates,
-                                 out_full_te1.1,
-                                 out_full_te1.2,
-                                 out_full_te2.1,
-                                 out_full_te2.2)
-# Show the comparison data frame sorted by method
+
 comparison_df <- comparison_df[order(comparison_df$method), ]
 
 # print the comparison data frame as a table
