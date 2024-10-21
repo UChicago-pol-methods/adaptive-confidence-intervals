@@ -121,8 +121,6 @@ process_data(out_full_te2.1[[1]], "(0,1)", "separate")
 process_data(out_full_te2.2[[1]], "(0,2)", "separate")
 
 
-comparison_df <- comparison_df[order(comparison_df$method), ]
-
 # print the comparison data frame as a table
 knitr::kable(comparison_df)
 ```

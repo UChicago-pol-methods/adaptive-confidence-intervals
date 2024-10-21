@@ -2,37 +2,40 @@
 
 # R Package Adaptation
 
-We have adjusted the simulation code originally provided by [Hadad, Vitor, et al. (2021)](https://arxiv.org/abs/1911.02768) to focus on only on the estimation methods relevant to our `banditsCI` R package: uniform and two-point estimators. The original Python simulation code is accessible [here](https://github.com/gsbDBI/adaptive-confidence-intervals/blob/master/experiments/main/simulations.ipynb).
+We have adjusted the simulation code originally provided by [Hadad, et al. (2021)](https://arxiv.org/abs/1911.02768) to focus on only on the estimation methods relevant to our `banditsCI` R package: uniform and two-point estimators. 
+The original Python simulation code is accessible [here](https://github.com/gsbDBI/adaptive-confidence-intervals/blob/master/experiments/main/simulations.ipynb).
 
 Our updated version of Python simulation code is accessible here:
-- [experiments/main/simulation.ipynb](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/simulations.ipynb)
+- [experiments/main/simulation.ipynb](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/master/experiments/main/simulations.ipynb)
 We simulate the experimental data in python, analyze it using the original python code, and then export identical data to be analyzed in R. 
 
 Our analysis script in R can be reviewed here:
-- R Markdown: [experiments/main/results/Simulation_with_Python_experiment_data.Rmd](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/results/Simulation_with_Python_experiment_data.Rmd)
-- Rendered PDF: [experiments/main/results/Simulation_with_Python_experiment_data.pdf](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/results/Simulation_with_Python_experiment_data.pdf)
+- R Markdown: [experiments/main/results/Simulation_with_Python_experiment_data.Rmd](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/master/experiments/main/results/Simulation_with_Python_experiment_data.Rmd)
+- Rendered PDF: [experiments/main/results/Simulation_with_Python_experiment_data.pdf](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/master/experiments/main/results/Simulation_with_Python_experiment_data.pdf)
 
-The objective is to compare the estimates produced in the [python notebook](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/non_contextual_replication/experiments/main/simulations.ipynb) (cells 8 and 9) to those in the R script, reported below:
-(Note that in numerical examples Hadad et al. estimate contrasts using the "separate" approach, Equation 23 in the text.)
+The objective is to compare the R code to the estimates produced in the [python notebook](https://github.com/UChicago-pol-methods/adaptive-confidence-intervals/blob/master/experiments/main/simulations.ipynb) (cells 8 and 9) to those in the R script, reported below. 
+Note that in numerical examples Hadad et al. estimate contrasts using the "separate" approach, Equation 23 in the text. 
 
 |method                  |  estimate| std_error|contrasts   |policy |
 |:-----------------------|---------:|---------:|:-----------|:------|
-|non_contextual_twopoint | 0.8267759| 0.1125030|main effect |0      |
-|non_contextual_twopoint | 0.9138038| 0.0580545|main effect |1      |
-|non_contextual_twopoint | 1.1012259| 0.0104059|main effect |2      |
-|non_contextual_twopoint | 0.3891761| 0.2723742|combined    |(0,1)  |
-|non_contextual_twopoint | 0.4351515| 0.2386683|combined    |(0,2)  |
-|non_contextual_twopoint | 0.2744500| 0.1129833|separate    |(0,1)  |
-|non_contextual_twopoint | 0.1874221| 0.0589797|separate    |(0,2)  |
 |uniform                 | 0.7198237| 0.2557261|main effect |0      |
+|non_contextual_twopoint | 0.8267759| 0.1125030|main effect |0      |
 |uniform                 | 0.7106815| 0.2011189|main effect |1      |
+|non_contextual_twopoint | 0.9138038| 0.0580545|main effect |1      |
+|uniform                 | 1.1055150| 0.0106840|main effect |2      |
+|non_contextual_twopoint | 1.1012259| 0.0104059|main effect |2      |
 |uniform                 | 1.1055150| 0.0106840|main effect |2      |
 |uniform                 | 0.3856913| 0.2559502|combined    |(0,1)  |
+|non_contextual_twopoint | 0.3891761| 0.2723742|combined    |(0,1)  |
 |uniform                 | 0.3948335| 0.2014011|combined    |(0,2)  |
+|non_contextual_twopoint | 0.4351515| 0.2386683|combined    |(0,2)  |
 |uniform                 | 0.3856913| 0.2559491|separate    |(0,1)  |
+|non_contextual_twopoint | 0.2744500| 0.1129833|separate    |(0,1)  |
 |uniform                 | 0.3948335| 0.2014024|separate    |(0,2)  |
+|non_contextual_twopoint | 0.1874221| 0.0589797|separate    |(0,2)  |
 
-We do find that the estimates are identical. 
+
+We find that the estimates are nearly identical except for rounding errors.
 
 
 ---------------------------------------------
