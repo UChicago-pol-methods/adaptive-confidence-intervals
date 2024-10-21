@@ -24,7 +24,6 @@ Note that in numerical examples Hadad et al. estimate contrasts using the "separ
 |non_contextual_twopoint | 0.9138038| 0.0580545|main effect |1      |
 |uniform                 | 1.1055150| 0.0106840|main effect |2      |
 |non_contextual_twopoint | 1.1012259| 0.0104059|main effect |2      |
-|uniform                 | 1.1055150| 0.0106840|main effect |2      |
 |uniform                 | 0.3856913| 0.2559502|combined    |(0,1)  |
 |non_contextual_twopoint | 0.3891761| 0.2723742|combined    |(0,1)  |
 |uniform                 | 0.3948335| 0.2014011|combined    |(0,2)  |
